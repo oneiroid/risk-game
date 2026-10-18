@@ -2,7 +2,7 @@
 // so the host can serialize it and replay deterministically.
 import { TERR, ADJ, IDS, CONTINENTS, TERRITORIES } from './map.js';
 
-export const PLAYER_COLORS = ['#d64545', '#3a76d8', '#3fa34d', '#e0a526'];
+export const PLAYER_COLORS = ['#c8382c', '#3466b0', '#3c9a68', '#d9a521']; // clans: akane, ai, matsu, kin
 export const PLAYER_COLOR_NAMES = ['Red', 'Blue', 'Green', 'Gold'];
 const START_ARMIES = { 2: 40, 3: 35, 4: 30 };
 const SYMBOLS = ['infantry', 'cavalry', 'artillery'];

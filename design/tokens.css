@@ -1,0 +1,84 @@
+/* DeF design tokens — "Meiji Steam": lacquer, brass, washi, indigo.
+   Fonts: Zen Antique (display), Zen Kaku Gothic New (UI), IBM Plex Mono (numbers, codes). */
+@import url("https://fonts.googleapis.com/css2?family=Zen+Antique&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=IBM+Plex+Mono:wght@500;700&display=swap");
+
+:root {
+  /* Lacquer & ink — surfaces */
+  --sumi-900: #0f0c0a;   /* page */
+  --sumi-800: #17120f;   /* panel */
+  --sumi-700: #211a15;   /* raised panel, inputs */
+  --sumi-600: #2e251d;   /* hover */
+  --sumi-500: #4a3d31;   /* hairline */
+
+  /* Brass — accent, borders, primary action */
+  --brass-200: #f2dca4;
+  --brass-300: #e6c27a;
+  --brass-400: #d4a24c;  /* primary */
+  --brass-500: #b5842f;
+  --brass-700: #6e4c19;
+  --brass-ink: #1c1406;  /* text on brass */
+
+  /* Urushi lacquer red — danger, attack, seals */
+  --shu-400: #d9472f;
+  --shu-500: #b3261e;
+  --shu-700: #6f1610;
+
+  /* Verdigris — online / success / patina */
+  --rokusho-400: #5fae97;
+  --rokusho-600: #33705f;
+
+  /* Ai indigo — ocean, info */
+  --ai-500: #24406a;
+  --ai-700: #162a47;
+  --ai-900: #0d1a2e;
+
+  /* Washi paper — cards, text */
+  --washi-50: #f6eedb;
+  --washi-100: #efe4cc;
+  --washi-300: #cdbb98;
+  --washi-500: #9c8b70;  /* muted text */
+
+  /* Clan colours (players 1–4) */
+  --clan-akane: #c8382c;   /* madder red */
+  --clan-ai: #3466b0;      /* indigo */
+  --clan-midori: #3c9a68;  /* pine */
+  --clan-kin: #d9a521;     /* gold */
+
+  /* Semantic */
+  --bg: var(--sumi-900);
+  --panel: var(--sumi-800);
+  --panel2: var(--sumi-700);
+  --line: var(--sumi-500);
+  --text: var(--washi-100);
+  --muted: var(--washi-500);
+  --accent: var(--brass-400);
+  --danger: var(--shu-500);
+  --ok: var(--rokusho-400);
+  --ocean: var(--ai-700);
+
+  /* Type */
+  --font-display: "Zen Antique", "Shippori Mincho", Georgia, serif;
+  --font-ui: "Zen Kaku Gothic New", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-num: "IBM Plex Mono", ui-monospace, monospace;
+  --fs-xs: 12px; --fs-sm: 13.5px; --fs-md: 15px; --fs-lg: 18px; --fs-xl: 24px; --fs-2xl: 34px; --fs-3xl: 52px;
+  --track-caps: .18em;
+
+  /* Space (4 px base) */
+  --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 20px; --s-6: 24px; --s-8: 32px;
+
+  /* Shape — small radii: cut metal and lacquered wood, not soft plastic */
+  --r-sm: 4px; --r-md: 6px; --r-lg: 10px; --r-pill: 999px;
+  --hair: 1px solid var(--line);
+  --brass-hair: 1px solid var(--brass-700);
+
+  /* Depth */
+  --shadow-1: 0 2px 6px rgba(0,0,0,.45);
+  --shadow-2: 0 18px 48px rgba(0,0,0,.55);
+  --bevel: inset 0 1px 0 rgba(255,236,190,.10), inset 0 -1px 0 rgba(0,0,0,.5);
+  --brass-grad: linear-gradient(180deg, var(--brass-300) 0%, var(--brass-400) 45%, var(--brass-500) 100%);
+  --shu-grad: linear-gradient(180deg, var(--shu-400) 0%, var(--shu-500) 60%, var(--shu-700) 140%);
+
+  /* Motion */
+  --ease: cubic-bezier(.3,.7,.2,1);
+  --t-fast: .12s; --t-med: .25s;
+}

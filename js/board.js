@@ -9,9 +9,9 @@ const el = (tag, attrs = {}, parent) => {
   return e;
 };
 
-const CONT_LABELS = {
-  na: [255, 20], sa: [180, 600], eu: [520, 40], af: [700, 610], as: [800, 30], au: [880, 410],
-};
+const RELIEF_URL = new URL('../img/relief.jpg', import.meta.url).href;
+const SEIGAIHA = 'M0 20a20 20 0 0 1 40 0M6 20a14 14 0 0 1 28 0M12 20a8 8 0 0 1 16 0M-20 10a20 20 0 0 1 40 0M-14 10a14 14 0 0 1 28 0'
+  + 'M-8 10a8 8 0 0 1 16 0M20 10a20 20 0 0 1 40 0M26 10a14 14 0 0 1 28 0M32 10a8 8 0 0 1 16 0';
 
 export class Board {
   constructor(container, onTap) {
@@ -21,25 +21,33 @@ export class Board {
     const svg = (this.svg = el('svg', { class: 'board', 'aria-label': 'Game board' }));
     const defs = el('defs', {}, svg);
     defs.innerHTML = `
-      <pattern id="waves" width="24" height="12" patternUnits="userSpaceOnUse">
-        <path d="M0 6 Q6 2 12 6 T24 6" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+      <pattern id="seigaiha" width="20" height="10" patternUnits="userSpaceOnUse">
+        <path d="${SEIGAIHA}" transform="scale(.5)" class="wave"/>
       </pattern>`;
     el('rect', { x: -3000, y: -3000, width: 7000, height: 7000, class: 'ocean' }, svg);
-    el('rect', { x: -3000, y: -3000, width: 7000, height: 7000, fill: 'url(#waves)' }, svg);
     this.world = el('g', {}, svg);
-    const lanes = el('g', { class: 'lanes' }, this.world);
-    for (const [x1, y1, x2, y2] of geo.lanes) el('line', { x1, y1, x2, y2 }, lanes);
-    el('path', { d: geo.coastD, class: 'coast' }, this.world);
+    el('rect', { x: -3000, y: -3000, width: 7000, height: 7000, fill: 'url(#seigaiha)', class: 'waves' }, this.world);
+    el('path', { d: geo.graticule, class: 'grat' }, this.world);
+    el('line', { x1: 0, x2: VIEW_W, y1: geo.equator, y2: geo.equator, class: 'equator' }, this.world);
+    // all outlines in one path, drawn under the land: only the seaward half of each stroke shows, i.e. the coast
+    const allD = TERRITORIES.map(t => geo.paths[t.id]).join('');
+    el('path', { d: allD, class: 'shelf' }, this.world);
+    el('path', { d: allD, class: 'coast' }, this.world);
     const terrG = el('g', { class: 'terrs' }, this.world);
     this.paths = {};
     for (const t of TERRITORIES) {
       const p = el('path', { d: geo.paths[t.id], class: 'terr', 'data-id': t.id, 'fill-rule': 'evenodd' }, terrG);
       this.paths[t.id] = p;
     }
+    el('image', { href: RELIEF_URL, x: 0, y: 0, width: VIEW_W, height: VIEW_H, preserveAspectRatio: 'none', class: 'relief' }, this.world);
+    el('path', { d: geo.walls, class: 'wall' }, this.world);
+    el('path', { d: geo.walls, class: 'wall-teeth' }, this.world);
+    const lanes = el('g', { class: 'lanes' }, this.world);
+    for (const [x1, y1, x2, y2] of geo.lanes) el('line', { x1, y1, x2, y2 }, lanes);
     this.hl = el('g', { class: 'hl' }, this.world);
     const contG = el('g', { class: 'cont-labels' }, this.world);
-    for (const c in CONT_LABELS) {
-      const [x, y] = CONT_LABELS[c];
+    for (const c in geo.contLabels) {
+      const [x, y] = geo.contLabels[c];
       const tx = el('text', { x, y }, contG);
       tx.textContent = `${CONTINENTS[c].name} +${CONTINENTS[c].bonus}`;
     }
@@ -51,7 +59,8 @@ export class Board {
       const inner = el('g', {}, g);
       const name = el('text', { class: 'tname', y: -15 }, inner);
       name.textContent = t.name;
-      const circle = el('circle', { r: 10.5 }, inner);
+      const circle = el('circle', { r: 9.5 }, inner);
+      el('circle', { r: 10.6, class: 'rim' }, inner);
       const num = el('text', { class: 'num', y: 4 }, inner);
       g.setAttribute('transform', `translate(${x},${y})`);
       this.badges[t.id] = { g, inner, circle, num, x, y };
@@ -104,8 +113,11 @@ export class Board {
     setTimeout(() => b.g.classList.remove(cls), 900);
   }
 
+  // home view: the whole world, except on portrait screens, where the map fills the height and pans sideways
   fit() {
-    this.zoom = 1;
+    const W = this.container.clientWidth || 1, H = this.container.clientHeight || 1;
+    const r = (H / VIEW_H) / (W / VIEW_W);
+    this.zoom = r > 1.8 ? Math.min(5, r * 0.9) : 1;
     this.center = { x: VIEW_W / 2, y: VIEW_H / 2 };
     this._applyView();
   }

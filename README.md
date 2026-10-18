@@ -38,6 +38,9 @@ npm test
 ```
 
 `npm test` runs rule checks and 300 computer-vs-computer games with invariant checks.
+
+The board (`js/geo.js`, `img/relief.jpg`) is generated from Natural Earth 1:50m data (public domain) by
+`tools/build-map.py`; its header lists the source files. The design system is in `design/` (open `design/index.html`).
 `node tools/check-map.mjs /tmp/map.svg` reports board geometry issues and writes a preview.
 
 | File | Purpose |
