@@ -326,8 +326,8 @@ function initLobby() {
     app.state = createGame(players, l.options);
     l.started = true;
     publishLobby();
-    changed();
     enterGame();
+    changed();
   };
   $('#btnLeaveLobby').onclick = () => { leaveOnline(true); show('menu'); };
   $('#btnShare').onclick = async () => {
@@ -621,7 +621,7 @@ function quitToMenu() {
 // ---------------------------------------------------------------- rendering
 function render() {
   const s = app.state;
-  if (!s) return;
+  if (!s || !app.board || !$('#game').classList.contains('active')) return;
   const u = app.ui;
   const key = `${s.id}|${s.current}|${s.phase}|${s.turn}`;
   if (key !== u.key) {
