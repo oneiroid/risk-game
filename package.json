@@ -1,0 +1,10 @@
+{
+  "name": "risk-game",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node tests/rules.mjs && node tests/sim.mjs 300",
+    "check-map": "node tools/check-map.mjs",
+    "serve": "python3 -m http.server 8765"
+  }
+}

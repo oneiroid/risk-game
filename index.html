@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#0d1b2a">
+  <meta name="description" content="Risk: world conquest strategy game for 1–4 players, online or against the computer.">
+  <title>Risk — World Conquest</title>
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/mqtt@5.10.1/dist/mqtt.min.js" defer></script>
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+  <!-- Main menu -->
+  <section id="menu" class="screen active">
+    <div class="card menu-card">
+      <h1>RISK<small>World Conquest</small></h1>
+      <label class="field">Your name <input id="nameInput" maxlength="16" autocomplete="nickname"></label>
+      <button class="btn primary" id="btnResume" hidden>Resume game</button>
+      <button class="btn primary" id="btnSolo">Play vs computer</button>
+      <button class="btn" id="btnHost">Host online game</button>
+      <button class="btn" id="btnJoin">Join online game</button>
+      <button class="btn" id="btnHostResume" hidden>Resume hosted game</button>
+      <button class="btn" id="btnRejoin" hidden>Rejoin online game</button>
+      <button class="btn ghost" id="btnRules">Rules</button>
+    </div>
+  </section>
+
+  <!-- Local game setup -->
+  <section id="setup" class="screen">
+    <div class="card">
+      <h2>New game</h2>
+      <div id="localSeats" class="seats"></div>
+      <div class="row">
+        <button class="btn small" id="addSeat">+ Add player</button>
+      </div>
+      <div class="options" id="localOptions"></div>
+      <div class="row end">
+        <button class="btn ghost" data-back>Back</button>
+        <button class="btn primary" id="startLocal">Start</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Online lobby (host & client) -->
+  <section id="lobby" class="screen">
+    <div class="card">
+      <h2 id="lobbyTitle">Online game</h2>
+      <div id="joinForm" hidden>
+        <label class="field">Your name <input id="joinName" maxlength="16" autocomplete="nickname"></label>
+        <label class="field">Room code <input id="codeInput" maxlength="5" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="ABCD1"></label>
+        <div class="row end">
+          <button class="btn ghost" data-back>Back</button>
+          <button class="btn primary" id="btnDoJoin">Join</button>
+        </div>
+      </div>
+      <div id="lobbyBody" hidden>
+        <div class="code-box">
+          <div>Room code</div>
+          <div id="roomCode" class="code"></div>
+          <button class="btn small" id="btnShare">Share link</button>
+        </div>
+        <div id="lobbySeats" class="seats"></div>
+        <div class="options" id="lobbyOptions"></div>
+        <p id="lobbyNote" class="note"></p>
+        <div class="row end">
+          <button class="btn ghost" id="btnLeaveLobby">Leave</button>
+          <button class="btn primary" id="startOnline" hidden>Start game</button>
+        </div>
+      </div>
+      <p id="lobbyStatus" class="note"></p>
+    </div>
+  </section>
+
+  <!-- Game -->
+  <section id="game" class="screen">
+    <header id="topbar">
+      <button class="icon-btn" id="btnGameMenu" aria-label="Menu">☰</button>
+      <div id="players"></div>
+      <span id="netStatus"></span>
+    </header>
+    <div id="mapWrap">
+      <div id="zoomCtl">
+        <button class="icon-btn" data-z="in" aria-label="Zoom in">+</button>
+        <button class="icon-btn" data-z="out" aria-label="Zoom out">−</button>
+        <button class="icon-btn" data-z="fit" aria-label="Fit map">⤢</button>
+      </div>
+      <div id="dice" hidden></div>
+      <div id="toast" hidden></div>
+      <div id="banner" hidden></div>
+    </div>
+    <aside id="side">
+      <div id="panel"></div>
+      <div id="logBox"><div id="log"></div></div>
+    </aside>
+  </section>
+
+  <dialog id="cardsDlg">
+    <h3>Cards <span id="cardsValue" class="muted"></span></h3>
+    <div id="cardsList" class="cards"></div>
+    <p id="cardsNote" class="note"></p>
+    <div class="row end">
+      <button class="btn ghost" id="cardsClose">Close</button>
+      <button class="btn" id="cardsAuto">Select best set</button>
+      <button class="btn primary" id="cardsTrade" disabled>Trade</button>
+    </div>
+  </dialog>
+
+  <dialog id="menuDlg">
+    <h3>Menu</h3>
+    <div class="col">
+      <button class="btn" id="mLog">Battle log</button>
+      <button class="btn" id="mRules">Rules</button>
+      <label class="field">Computer speed
+        <select id="speedSel"><option value="250">Fast</option><option value="650">Normal</option><option value="1200">Slow</option></select>
+      </label>
+      <button class="btn" id="mQuit">Leave to main menu</button>
+      <button class="btn ghost" id="mClose">Close</button>
+    </div>
+  </dialog>
+
+  <dialog id="logDlg">
+    <h3>Battle log</h3>
+    <div id="logFull" class="log-full"></div>
+    <div class="row end"><button class="btn" data-close>Close</button></div>
+  </dialog>
+
+  <dialog id="rulesDlg">
+    <h3>Rules</h3>
+    <div class="rules">
+      <p><b>Goal:</b> conquer all 42 territories (or be the last player standing).</p>
+      <p><b>Setup:</b> territories are dealt randomly with 1 army each. Each player then places the remaining starting armies (2 players: 40, 3: 35, 4: 30 in total), 3 per turn.</p>
+      <p><b>1. Reinforce.</b> Receive territories ÷ 3 (minimum 3) plus continent bonuses for every continent you fully own. Tap your territories to place armies.</p>
+      <p><b>Cards.</b> Conquering at least one territory in a turn earns a card. Trade 3 of a kind, or one of each (wild cards match anything) for armies: 4, 6, 8, 10, 12, 15, then +5 per trade (or fixed 4/6/8/10 by set type). +2 armies on a traded card's territory you own. With 5+ cards you must trade.</p>
+      <p><b>2. Attack</b> (optional, as often as you like). From a territory with 2+ armies to an adjacent enemy (dashed lines are sea routes). Attacker rolls up to 3 dice (one fewer than armies), defender up to 2. Highest dice are compared pairwise; ties go to the defender. Blitz repeats until the territory falls or you run out. After a conquest move in at least as many armies as dice rolled. Eliminating a player gives you their cards; at 5+ cards you trade immediately.</p>
+      <p><b>3. Fortify</b> (optional). Move armies once from one territory to another connected through your own territories, then your turn ends.</p>
+      <p><b>Map:</b> drag to pan, pinch or scroll to zoom.</p>
+    </div>
+    <div class="row end"><button class="btn" data-close>Close</button></div>
+  </dialog>
+</body>
+</html>
