@@ -1,0 +1,45 @@
+/* DeF map: the game board (js/board.js). Needs tokens.css. */
+svg.board { width: 100%; height: 100%; display: block; user-select: none; -webkit-user-select: none; touch-action: none;
+  background: var(--ai-900); isolation: isolate; }
+.ocean { fill: var(--ai-900); }
+.waves { opacity: .9; }
+.wave { fill: none; stroke: #1f3a63; stroke-width: 1.1; }
+.grat { fill: none; stroke: var(--brass-500); stroke-width: .5; opacity: .22; }
+.equator { stroke: var(--brass-400); stroke-width: .7; stroke-dasharray: 6 3 1 3; opacity: .45; }
+
+/* coast: strokes of all outlines under the land, so only the seaward half shows */
+.shelf { fill: none; stroke: #2f5f8f; stroke-width: 7; stroke-linejoin: round; opacity: .55; }
+.coast { fill: none; stroke: var(--brass-300); stroke-width: 1.5; stroke-linejoin: round; }
+
+.terr { stroke: rgba(15,12,10,.75); stroke-width: .45; stroke-linejoin: round; cursor: pointer; transition: fill .3s, opacity .2s; }
+.terr.dim { opacity: .4; }
+.terr:hover { filter: brightness(1.15); }
+.relief { mix-blend-mode: soft-light; pointer-events: none; }
+
+/* closed borders: touching on the map, not adjacent in the rules — a ridge you cannot cross */
+.wall { fill: none; stroke: var(--sumi-900); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; pointer-events: none; }
+.wall-teeth { fill: none; stroke: var(--brass-300); stroke-width: 2.6; stroke-dasharray: .7 2.2; pointer-events: none; }
+
+.lanes line { stroke: var(--washi-100); stroke-width: 1.1; stroke-dasharray: 3 3; stroke-linecap: round; opacity: .8; }
+
+.hl path, .hl line { pointer-events: none; fill: none; }
+.ring-sel { stroke: var(--washi-50); stroke-width: 2.2; }
+.ring-to { stroke: var(--brass-300); stroke-width: 2.2; }
+.ring-target { stroke: var(--shu-400); stroke-width: 1.6; stroke-dasharray: 4 3; animation: march 1s linear infinite; }
+@keyframes march { to { stroke-dashoffset: -14; } }
+.hl .arrow { stroke: var(--washi-50); stroke-width: 2; stroke-dasharray: 5 4; opacity: .9; }
+
+/* army tokens: clan-coloured coins with a brass rim */
+.badge { cursor: pointer; }
+.badge circle { stroke: rgba(0,0,0,.6); stroke-width: 1; }
+.badge .rim { fill: none; stroke: var(--brass-300); stroke-width: 1.6; filter: drop-shadow(0 1px 1px rgba(0,0,0,.6)); }
+.badge .num { fill: var(--washi-50); font: 700 10.5px var(--font-num); text-anchor: middle; paint-order: stroke;
+  stroke: rgba(0,0,0,.5); stroke-width: 2px; }
+.badge .tname { display: none; fill: var(--washi-50); font: 500 6.5px var(--font-ui); text-anchor: middle; paint-order: stroke;
+  stroke: rgba(15,12,10,.85); stroke-width: 2px; pointer-events: none; }
+svg.show-names .badge .tname { display: block; }
+.cont-labels text { display: none; fill: var(--brass-200); font: 400 12px var(--font-display); letter-spacing: 2px;
+  text-anchor: middle; text-transform: uppercase; pointer-events: none; paint-order: stroke; stroke: rgba(13,26,46,.8); stroke-width: 3px; opacity: .85; }
+svg.show-conts .cont-labels text { display: block; }
+.badge.flash .rim { animation: flash .9s ease-out; }
+@keyframes flash { 0% { stroke: var(--washi-50); stroke-width: 6; } 100% { stroke-width: 1.6; } }

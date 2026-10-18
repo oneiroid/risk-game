@@ -1,0 +1,161 @@
+/* DeF components. Class names match the game's (css/style.css) so this file can replace its component rules. */
+
+/* ---------- Materials ---------- */
+.lacquer {
+  background:
+    radial-gradient(circle at 10px 10px, var(--brass-300) 0 1.6px, var(--brass-700) 2.2px, transparent 2.8px),
+    radial-gradient(circle at calc(100% - 10px) 10px, var(--brass-300) 0 1.6px, var(--brass-700) 2.2px, transparent 2.8px),
+    radial-gradient(circle at 10px calc(100% - 10px), var(--brass-300) 0 1.6px, var(--brass-700) 2.2px, transparent 2.8px),
+    radial-gradient(circle at calc(100% - 10px) calc(100% - 10px), var(--brass-300) 0 1.6px, var(--brass-700) 2.2px, transparent 2.8px),
+    linear-gradient(160deg, #1e1712 0%, var(--sumi-800) 55%, #120e0b 100%);
+  border: var(--brass-hair);
+  box-shadow: var(--bevel), var(--shadow-2);
+}
+/* Seigaiha wave pattern for oceans and menu backdrops */
+.seigaiha {
+  background-color: var(--ai-700);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='20' viewBox='0 0 40 20'%3E%3Cg fill='none' stroke='%23305584' stroke-width='1'%3E%3Cpath d='M0 20a20 20 0 0 1 40 0M6 20a14 14 0 0 1 28 0M12 20a8 8 0 0 1 16 0M-20 10a20 20 0 0 1 40 0M-14 10a14 14 0 0 1 28 0M-8 10a8 8 0 0 1 16 0M20 10a20 20 0 0 1 40 0M26 10a14 14 0 0 1 28 0M32 10a8 8 0 0 1 16 0'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 40px 20px;
+}
+.washi {
+  background-color: var(--washi-100);
+  background-image:
+    radial-gradient(rgba(120,90,40,.10) 1px, transparent 1.4px),
+    radial-gradient(rgba(120,90,40,.07) 1px, transparent 1.4px);
+  background-size: 7px 9px, 11px 5px;
+  background-position: 0 0, 3px 2px;
+  color: #2b2213;
+}
+
+/* ---------- Type ---------- */
+.display { font-family: var(--font-display); font-weight: 400; letter-spacing: .02em; }
+.eyebrow { font: 700 var(--fs-xs)/1 var(--font-ui); letter-spacing: var(--track-caps); text-transform: uppercase; color: var(--brass-400); }
+.num { font-family: var(--font-num); font-variant-numeric: tabular-nums; }
+.muted { color: var(--muted); }
+
+/* ---------- Card / panel ---------- */
+.card { border-radius: var(--r-lg); padding: var(--s-6); }
+.card h2 { font: 400 var(--fs-xl)/1.2 var(--font-display); color: var(--brass-300); margin: 0 0 var(--s-3); }
+.rule-brass { height: 1px; border: 0; margin: var(--s-4) 0;
+  background: linear-gradient(90deg, transparent, var(--brass-500) 15%, var(--brass-500) 85%, transparent); }
+
+/* ---------- Buttons ---------- */
+.btn { font: 700 var(--fs-md)/1 var(--font-ui); letter-spacing: .02em; color: var(--text);
+  background: linear-gradient(180deg, var(--sumi-600), var(--sumi-700)); border: 1px solid var(--sumi-500);
+  border-radius: var(--r-md); padding: 12px 18px; min-height: 44px; cursor: pointer; box-shadow: var(--bevel);
+  transition: background var(--t-fast), border-color var(--t-fast), transform .05s; }
+.btn:hover:not(:disabled) { border-color: var(--brass-500); }
+.btn:active:not(:disabled) { transform: translateY(1px); box-shadow: inset 0 2px 4px rgba(0,0,0,.5); }
+.btn:focus-visible { outline: 2px solid var(--brass-300); outline-offset: 2px; }
+.btn:disabled { opacity: .4; cursor: default; }
+.btn.primary { background: var(--brass-grad); color: var(--brass-ink); border-color: var(--brass-700);
+  box-shadow: inset 0 1px 0 rgba(255,250,220,.6), inset 0 -2px 0 rgba(90,60,10,.45), 0 2px 0 #3d2a0c; }
+.btn.primary:hover:not(:disabled) { filter: brightness(1.08); }
+.btn.danger { background: var(--shu-grad); color: var(--washi-50); border-color: var(--shu-700);
+  box-shadow: inset 0 1px 0 rgba(255,200,180,.35), 0 2px 0 #3a0b08; }
+.btn.ghost { background: transparent; box-shadow: none; border-color: transparent; color: var(--brass-300); }
+.btn.ghost:hover:not(:disabled) { border-color: var(--sumi-500); }
+.btn.small { padding: 7px 12px; min-height: 36px; font-size: var(--fs-sm); }
+.btn.sel { outline: 2px solid var(--brass-400); outline-offset: 1px; }
+.icon-btn { width: 40px; height: 40px; display: inline-grid; place-items: center; padding: 0; cursor: pointer;
+  border-radius: 50%; color: var(--brass-200); font-size: 18px;
+  background: radial-gradient(circle at 35% 30%, var(--sumi-600), var(--sumi-800) 70%);
+  border: 2px solid var(--brass-500); box-shadow: 0 0 0 1px var(--brass-700), var(--shadow-1); }
+.icon-btn:hover { border-color: var(--brass-300); }
+
+/* Segmented control */
+.seg { display: inline-flex; border: 1px solid var(--brass-700); border-radius: var(--r-md); overflow: hidden; }
+.seg button { font: 700 var(--fs-sm)/1 var(--font-ui); color: var(--text); background: var(--sumi-700); border: 0;
+  padding: 8px 14px; min-height: 40px; cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--brass-700); }
+.seg button.on { background: var(--brass-grad); color: var(--brass-ink); }
+.seg button:disabled { opacity: .4; }
+
+/* ---------- Form ---------- */
+.field { display: flex; flex-direction: column; gap: 6px; font: 500 var(--fs-sm) var(--font-ui); color: var(--muted); }
+.field input, .field select { font: 500 16px var(--font-ui); color: var(--text); background: var(--sumi-900);
+  border: 1px solid var(--sumi-500); border-bottom-color: var(--brass-700); border-radius: var(--r-sm); padding: 10px 12px; }
+.field input:focus, .field select:focus { outline: none; border-color: var(--brass-400); box-shadow: 0 0 0 3px rgba(212,162,76,.18); }
+input[type=range] { accent-color: var(--brass-400); }
+
+/* Seat row (lobby / setup) */
+.seat { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--r-md);
+  background: var(--sumi-700); border-left: 3px solid var(--c, var(--brass-500)); }
+.seat .who { flex: 1; font-weight: 700; }
+.seat select { font: 500 14px var(--font-ui); color: var(--text); background: var(--sumi-900); border: 1px solid var(--sumi-500);
+  border-radius: var(--r-sm); padding: 6px 8px; }
+
+/* Clan mon: player swatch as a crest */
+.mon { width: 20px; height: 20px; border-radius: 50%; flex: none; background: var(--c);
+  box-shadow: inset 0 0 0 2px rgba(0,0,0,.35), 0 0 0 1.5px var(--brass-400); position: relative; }
+.mon::after { content: ""; position: absolute; inset: 5px; border-radius: 50%; border: 1.5px solid rgba(255,245,220,.75); }
+
+/* Player chip (top bar) */
+.pchip { display: inline-flex; align-items: center; gap: 7px; padding: 5px 10px 5px 6px; border-radius: var(--r-pill);
+  background: var(--sumi-700); border: 1px solid var(--sumi-500); font: 500 var(--fs-sm) var(--font-ui); white-space: nowrap; }
+.pchip .nm { font-weight: 700; }
+.pchip .st { color: var(--muted); font-family: var(--font-num); font-size: var(--fs-xs); }
+.pchip.cur { border-color: var(--c); box-shadow: 0 0 0 1px var(--c), 0 0 14px -3px var(--c); }
+.pchip.dead { opacity: .4; text-decoration: line-through; }
+
+/* Phase header */
+.ph-head { display: flex; align-items: center; gap: 8px; font: 500 var(--fs-md) var(--font-ui); }
+.ph-head .phase { font: 700 var(--fs-xs)/1 var(--font-ui); letter-spacing: var(--track-caps); text-transform: uppercase;
+  color: var(--brass-300); border: 1px solid var(--brass-700); padding: 4px 7px; border-radius: var(--r-sm); }
+.hint { color: var(--muted); font-size: var(--fs-sm); margin: 6px 0 10px; }
+.hint b { color: var(--text); }
+
+/* Room code */
+.code-box { text-align: center; padding: var(--s-3); border-radius: var(--r-md); background: var(--sumi-900);
+  border: 1px dashed var(--brass-700); color: var(--muted); font-size: var(--fs-sm); }
+.code { font: 700 36px/1.2 var(--font-num); letter-spacing: .2em; color: var(--brass-300); text-shadow: 0 0 12px rgba(212,162,76,.35); }
+
+/* ---------- Dice: lacquer cube (attack) / bone cube (defence) ---------- */
+.die { width: 32px; height: 32px; border-radius: var(--r-sm); display: grid; place-items: center;
+  font: 700 17px var(--font-num); animation: roll .35s var(--ease); }
+.die.a { background: var(--shu-grad); color: var(--washi-50); box-shadow: inset 0 0 0 1.5px var(--brass-400), var(--shadow-1); }
+.die.d { background: linear-gradient(180deg, var(--washi-50), var(--washi-300)); color: var(--sumi-900);
+  box-shadow: inset 0 0 0 1.5px var(--sumi-500), var(--shadow-1); }
+.die.lost { opacity: .3; filter: grayscale(.6); }
+@keyframes roll { 0% { transform: rotate(-200deg) scale(.4); } 100% { transform: none; } }
+
+/* ---------- Territory cards (fuda) ---------- */
+.gcard { width: 96px; min-height: 132px; border-radius: var(--r-md); padding: 8px 6px; text-align: center; cursor: pointer;
+  display: flex; flex-direction: column; justify-content: space-between; position: relative;
+  box-shadow: inset 0 0 0 3px var(--washi-100), inset 0 0 0 4px var(--brass-500), var(--shadow-1);
+  transition: transform var(--t-med) var(--ease), box-shadow var(--t-med); }
+.gcard .kind { font: 700 9.5px/1 var(--font-ui); letter-spacing: var(--track-caps); text-transform: uppercase; opacity: .65; }
+.gcard .sym { font: 400 40px/1 var(--font-display); color: var(--sumi-900); }
+.gcard .tn { font: 500 11.5px/1.2 var(--font-ui); }
+.gcard.owned .tn { font-weight: 700; color: var(--shu-500); }
+.gcard.wild .sym { color: var(--shu-500); }
+.gcard.picked { transform: translateY(-6px);
+  box-shadow: inset 0 0 0 3px var(--washi-100), inset 0 0 0 4px var(--brass-500), 0 0 0 2px var(--brass-400), 0 10px 18px rgba(0,0,0,.5); }
+.gcard.picked::after { content: "選"; position: absolute; top: -9px; right: -9px; width: 24px; height: 24px; border-radius: 50%;
+  display: grid; place-items: center; font: 700 12px var(--font-ui); background: var(--shu-500); color: var(--washi-50);
+  box-shadow: 0 0 0 2px var(--washi-50); }
+
+/* ---------- Feedback ---------- */
+.toast { display: inline-block; padding: 9px 16px; border-radius: var(--r-pill); font-size: var(--fs-sm);
+  background: rgba(15,12,10,.92); border: 1px solid var(--brass-700); box-shadow: var(--shadow-1); }
+.banner { padding: 7px 12px; text-align: center; font: 700 var(--fs-sm) var(--font-ui); color: var(--washi-50);
+  background: repeating-linear-gradient(-45deg, var(--shu-500) 0 14px, var(--shu-700) 14px 28px); }
+.badge-net { font: 500 var(--fs-xs) var(--font-num); color: var(--ok); }
+.badge-net::before { content: "●"; margin-right: 5px; }
+.badge-net.bad { color: var(--shu-400); }
+
+/* Hanko seal (victory, confirmations, stamps) */
+.hanko { display: inline-grid; place-items: center; width: 64px; height: 64px; border-radius: var(--r-sm);
+  border: 3px solid var(--shu-500); color: var(--shu-500); font: 400 28px/1 var(--font-display);
+  transform: rotate(-6deg); opacity: .92; mix-blend-mode: multiply; }
+
+/* Pressure gauge loader */
+.gauge { width: 44px; height: 44px; border-radius: 50%; position: relative; border: 3px solid var(--brass-500);
+  background: radial-gradient(circle, var(--washi-100) 0 58%, var(--washi-300) 60% 100%); box-shadow: var(--shadow-1); }
+.gauge::after { content: ""; position: absolute; left: 50%; top: 50%; width: 2px; height: 16px; margin-left: -1px;
+  background: var(--shu-500); transform-origin: 50% 0; animation: needle 1.6s var(--ease) infinite alternate; }
+@keyframes needle { from { transform: rotate(120deg); } to { transform: rotate(250deg); } }
+
+/* Dialog */
+.dialog { border-radius: var(--r-lg); padding: var(--s-5); color: var(--text); }
+.dialog h3 { font: 400 var(--fs-xl)/1.2 var(--font-display); color: var(--brass-300); margin: 0 0 var(--s-3); }

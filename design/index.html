@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DeF — Design System</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="components.css">
+<link rel="stylesheet" href="map.css">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 400 var(--fs-md)/1.5 var(--font-ui); }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 var(--s-5) 80px; }
+  header.hero { padding: 56px 0 40px; display: grid; grid-template-columns: auto 1fr; gap: 32px; align-items: center; }
+  header.hero h1 { font: 400 var(--fs-3xl)/1 var(--font-display); color: var(--brass-300); margin: 8px 0 12px; }
+  header.hero p { max-width: 58ch; color: var(--washi-300); margin: 0; }
+  section { padding: 40px 0 8px; border-top: 1px solid var(--sumi-600); }
+  section > h2 { font: 400 var(--fs-2xl)/1.1 var(--font-display); color: var(--brass-300); margin: 6px 0 6px; display: flex; gap: 14px; align-items: baseline; }
+  section > h2 .jp { font-size: var(--fs-lg); color: var(--brass-500); }
+  section > p.lede { color: var(--washi-300); max-width: 70ch; margin: 0 0 22px; }
+  .grid { display: grid; gap: var(--s-4); }
+  .g2 { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+  .g3 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .tile { border-radius: var(--r-lg); padding: var(--s-5); }
+  .tile .eyebrow { display: block; margin-bottom: var(--s-3); }
+  .row { display: flex; gap: var(--s-2); align-items: center; flex-wrap: wrap; }
+  .stack { display: flex; flex-direction: column; gap: var(--s-3); }
+  code { font: 500 12px var(--font-num); color: var(--brass-200); }
+  .spec { font: 500 12px var(--font-num); color: var(--muted); }
+
+  /* swatches */
+  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin-bottom: 18px; }
+  .sw { border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--sumi-600); background: var(--sumi-800); }
+  .sw .chip { height: 64px; }
+  .sw .meta { padding: 8px 10px; font-size: 12px; line-height: 1.35; }
+  .sw .meta b { display: block; font-size: 13px; }
+  .grp-title { font: 700 var(--fs-xs)/1 var(--font-ui); letter-spacing: var(--track-caps); text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
+
+  /* clans */
+  .clan { display: flex; gap: 14px; align-items: center; padding: 14px; border-radius: var(--r-md); background: var(--sumi-800); border: 1px solid var(--sumi-600); }
+  .clan .kanji { font: 400 34px/1 var(--font-display); width: 56px; height: 56px; display: grid; place-items: center;
+    border-radius: 50%; background: var(--c); color: var(--washi-50); box-shadow: 0 0 0 2px var(--sumi-900), 0 0 0 4px var(--brass-500); }
+  .clan b { display: block; font-size: var(--fs-lg); }
+
+  /* type */
+  .type-row { display: grid; grid-template-columns: 170px 1fr; gap: 16px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--sumi-700); }
+
+  /* lockups */
+  .lockup { display: grid; place-items: center; gap: 14px; padding: 32px 16px; border-radius: var(--r-lg); text-align: center; min-height: 260px; }
+  .lockup.paper { color: var(--sumi-900); }
+  .game-title { font: 400 64px/1 var(--font-display); letter-spacing: .14em; color: var(--brass-300);
+    text-shadow: 0 1px 0 var(--brass-700), 0 0 24px rgba(212,162,76,.25); margin: 0; }
+  .game-title small { display: block; font: 700 12px/1 var(--font-ui); letter-spacing: .4em; color: var(--washi-300); margin-top: 12px; text-shadow: none; }
+  .tenka { font: 400 22px/1 var(--font-display); color: var(--shu-400); letter-spacing: .5em; writing-mode: vertical-rl; }
+
+  /* map */
+  .map-demo { border-radius: var(--r-lg); overflow: hidden; border: var(--brass-hair); position: relative; aspect-ratio: 1000 / 509; }
+  .map-demo .zoom { position: absolute; right: 10px; top: 10px; display: flex; flex-direction: column; gap: 6px; z-index: 2; }
+  .map-legend { display: flex; gap: 22px; flex-wrap: wrap; margin-top: 12px; font-size: var(--fs-sm); color: var(--washi-300); align-items: center; }
+  .map-legend svg { vertical-align: middle; margin-right: 6px; }
+  /* do / don't */
+  .rules li { margin: 0 0 8px; color: var(--washi-300); }
+  .rules li b { color: var(--text); }
+  .ds-nav { position: sticky; top: 0; z-index: 5; background: rgba(15,12,10,.92); backdrop-filter: blur(6px); border-bottom: 1px solid var(--sumi-600); }
+  .ds-nav .wrap { display: flex; gap: 18px; padding-top: 10px; padding-bottom: 10px; overflow-x: auto; }
+  .ds-nav a { color: var(--washi-300); text-decoration: none; font: 700 var(--fs-xs)/1 var(--font-ui); letter-spacing: var(--track-caps); text-transform: uppercase; white-space: nowrap; }
+  .ds-nav a:hover { color: var(--brass-300); }
+  @media (max-width: 640px) { header.hero { grid-template-columns: 1fr; } .type-row { grid-template-columns: 1fr; gap: 4px; } }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="brass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f2dca4"/><stop offset=".45" stop-color="#d4a24c"/><stop offset="1" stop-color="#8a5f20"/>
+    </linearGradient>
+    <radialGradient id="lacq" cx=".38" cy=".32" r=".8">
+      <stop offset="0" stop-color="#3a2c22"/><stop offset=".7" stop-color="#17120f"/><stop offset="1" stop-color="#0b0807"/>
+    </radialGradient>
+    <symbol id="gear" viewBox="0 0 100 100">
+      <path fill="url(#brass)" stroke="#6e4c19" stroke-width="1" d="M92.8 45.7 L98.9 46.4 L98.9 53.6 L92.8 54.3 L91.7 60.5 L97.1 63.3 L94.7 70.1 L88.7 68.7 L85.6 74.2 L89.7 78.7 L85.1 84.2 L80.0 80.8 L75.2 84.9 L77.5 90.5 L71.3 94.1 L67.6 89.2 L61.7 91.4 L62.0 97.5 L55.0 98.7 L53.1 92.9 L46.9 92.9 L45.0 98.7 L38.0 97.5 L38.3 91.4 L32.4 89.2 L28.7 94.1 L22.5 90.5 L24.8 84.9 L20.0 80.8 L14.9 84.2 L10.3 78.7 L14.4 74.2 L11.3 68.7 L5.3 70.1 L2.9 63.3 L8.3 60.5 L7.2 54.3 L1.1 53.6 L1.1 46.4 L7.2 45.7 L8.3 39.5 L2.9 36.7 L5.3 29.9 L11.3 31.3 L14.4 25.8 L10.3 21.3 L14.9 15.8 L20.0 19.2 L24.8 15.1 L22.5 9.5 L28.7 5.9 L32.4 10.8 L38.3 8.6 L38.0 2.5 L45.0 1.3 L46.9 7.1 L53.1 7.1 L55.0 1.3 L62.0 2.5 L61.7 8.6 L67.6 10.8 L71.3 5.9 L77.5 9.5 L75.2 15.1 L80.0 19.2 L85.1 15.8 L89.7 21.3 L85.6 25.8 L88.7 31.3 L94.7 29.9 L97.1 36.7 L91.7 39.5Z"/>
+      <circle cx="50" cy="50" r="37" fill="url(#lacq)" stroke="#6e4c19" stroke-width="1.5"/>
+      <circle cx="50" cy="50" r="32.5" fill="none" stroke="url(#brass)" stroke-width="1.2"/>
+      <g fill="#e6c27a"><circle cx="50" cy="15.5" r="1.6"/><circle cx="50" cy="84.5" r="1.6"/><circle cx="15.5" cy="50" r="1.6"/><circle cx="84.5" cy="50" r="1.6"/></g>
+    </symbol>
+  </defs>
+</svg>
+
+<nav class="ds-nav"><div class="wrap">
+  <a href="#brand">Brand</a><a href="#color">Colour</a><a href="#clans">Clans</a><a href="#type">Type</a>
+  <a href="#components">Components</a><a href="#game">Game UI</a><a href="#map">Map</a><a href="#voice">Voice</a>
+</div></nav>
+
+<div class="wrap">
+  <header class="hero">
+    <svg width="148" height="148" viewBox="0 0 100 100" aria-label="DeF crest">
+      <use href="#gear"/>
+      <text x="50" y="58" text-anchor="middle" font-family="Zen Antique, serif" font-size="25" fill="#f2dca4">DeF</text>
+    </svg>
+    <div>
+      <span class="eyebrow">DeF design system · v0.1</span>
+      <h1>Meiji Steam</h1>
+      <p>Japan, 1870s: samurai clans and the steam engine on the same field. Black lacquer and brass for surfaces, washi paper for anything you read up close, urushi red for attack and danger, indigo for sea. Two motifs repeat everywhere: the <b>gear</b> as the rim of a clan crest (mon), and the <b>hanko</b> seal for decisions.</p>
+    </div>
+  </header>
+
+  <!-- BRAND -->
+  <section id="brand">
+    <span class="eyebrow">01</span>
+    <h2>Brand <span class="jp">紋章</span></h2>
+    <p class="lede">The DeF crest is a brass gear rim around a lacquer disc. Minimum size 24 px; below 32 px drop the inner ring. The seal is for one-colour use: stamps, favicons on paper backgrounds, watermarks.</p>
+    <div class="grid g3">
+      <div class="lockup lacquer">
+        <svg width="120" height="120" viewBox="0 0 100 100"><use href="#gear"/><text x="50" y="58" text-anchor="middle" font-family="Zen Antique, serif" font-size="25" fill="#f2dca4">DeF</text></svg>
+        <span class="spec">Crest · on lacquer</span>
+      </div>
+      <div class="lockup washi paper">
+        <div class="row" style="gap:28px">
+          <span class="hanko" style="width:88px;height:88px;font-size:30px">DeF</span>
+          <svg width="64" height="64" viewBox="0 0 100 100"><path fill="#b3261e" d="M92.8 45.7 L98.9 46.4 L98.9 53.6 L92.8 54.3 L91.7 60.5 L97.1 63.3 L94.7 70.1 L88.7 68.7 L85.6 74.2 L89.7 78.7 L85.1 84.2 L80.0 80.8 L75.2 84.9 L77.5 90.5 L71.3 94.1 L67.6 89.2 L61.7 91.4 L62.0 97.5 L55.0 98.7 L53.1 92.9 L46.9 92.9 L45.0 98.7 L38.0 97.5 L38.3 91.4 L32.4 89.2 L28.7 94.1 L22.5 90.5 L24.8 84.9 L20.0 80.8 L14.9 84.2 L10.3 78.7 L14.4 74.2 L11.3 68.7 L5.3 70.1 L2.9 63.3 L8.3 60.5 L7.2 54.3 L1.1 53.6 L1.1 46.4 L7.2 45.7 L8.3 39.5 L2.9 36.7 L5.3 29.9 L11.3 31.3 L14.4 25.8 L10.3 21.3 L14.9 15.8 L20.0 19.2 L24.8 15.1 L22.5 9.5 L28.7 5.9 L32.4 10.8 L38.3 8.6 L38.0 2.5 L45.0 1.3 L46.9 7.1 L53.1 7.1 L55.0 1.3 L62.0 2.5 L61.7 8.6 L67.6 10.8 L71.3 5.9 L77.5 9.5 L75.2 15.1 L80.0 19.2 L85.1 15.8 L89.7 21.3 L85.6 25.8 L88.7 31.3 L94.7 29.9 L97.1 36.7 L91.7 39.5Z"/><circle cx="50" cy="50" r="36" fill="#efe4cc"/><text x="50" y="58" text-anchor="middle" font-family="Zen Antique, serif" font-size="25" fill="#b3261e">DeF</text></svg>
+        </div>
+        <span class="spec">Seal + one-colour crest · on washi</span>
+      </div>
+      <div class="lockup lacquer">
+        <div class="row" style="gap:18px;align-items:center">
+          <p class="game-title">RISK<small>World Conquest</small></p>
+          <span class="tenka">天下統一</span>
+        </div>
+        <span class="spec">Game lockup · 天下統一 “unify the realm”</span>
+      </div>
+    </div>
+    <div class="row" style="margin-top:16px;gap:16px">
+      <svg width="64" height="64" viewBox="0 0 64 64" aria-label="Game icon"><rect width="64" height="64" rx="12" fill="#17120f"/><svg x="4" y="4" width="56" height="56" viewBox="0 0 100 100"><use href="#gear"/></svg><text x="32" y="41" text-anchor="middle" font-family="Zen Antique, serif" font-size="24" fill="#d9472f">天</text></svg>
+      <svg width="40" height="40" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="#17120f"/><svg x="4" y="4" width="56" height="56" viewBox="0 0 100 100"><use href="#gear"/></svg><text x="32" y="41" text-anchor="middle" font-family="Zen Antique, serif" font-size="24" fill="#d9472f">天</text></svg>
+      <svg width="24" height="24" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="#17120f"/><svg x="4" y="4" width="56" height="56" viewBox="0 0 100 100"><use href="#gear"/></svg><text x="32" y="41" text-anchor="middle" font-family="Zen Antique, serif" font-size="24" fill="#d9472f">天</text></svg>
+      <span class="spec">Game app icon · 64 / 40 / 24 px — replaces icon.svg</span>
+    </div>
+  </section>
+
+  <!-- COLOUR -->
+  <section id="color">
+    <span class="eyebrow">02</span>
+    <h2>Colour <span class="jp">色</span></h2>
+    <p class="lede">Dark lacquer is the default ground. Brass carries every primary action and focus state. Red is reserved for attack, danger and seals; it is never decorative.</p>
+    <div id="swatches"></div>
+  </section>
+
+  <!-- CLANS -->
+  <section id="clans">
+    <span class="eyebrow">03</span>
+    <h2>Clans <span class="jp">一族</span></h2>
+    <p class="lede">Player colours, each a traditional dye. They tint territories, army tokens, chips and seat rows. The kanji is the clan's mark where a colour alone is not enough (colour-blind players, monochrome log).</p>
+    <div class="grid g3" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+      <div class="clan" style="--c:var(--clan-akane)"><span class="kanji">茜</span><div><b>Akane</b><span class="spec">madder · #c8382c</span></div></div>
+      <div class="clan" style="--c:var(--clan-ai)"><span class="kanji">藍</span><div><b>Ai</b><span class="spec">indigo · #3466b0</span></div></div>
+      <div class="clan" style="--c:var(--clan-midori)"><span class="kanji">松</span><div><b>Matsu</b><span class="spec">pine · #3c9a68</span></div></div>
+      <div class="clan" style="--c:var(--clan-kin)"><span class="kanji">金</span><div><b>Kin</b><span class="spec">gold · #d9a521</span></div></div>
+    </div>
+  </section>
+
+  <!-- TYPE -->
+  <section id="type">
+    <span class="eyebrow">04</span>
+    <h2>Type <span class="jp">書体</span></h2>
+    <p class="lede"><b>Zen Antique</b> — Meiji-era printing type, for titles and card glyphs only. <b>Zen Kaku Gothic New</b> — all UI text. <b>IBM Plex Mono</b> — army counts, dice, room codes, anything that must line up.</p>
+    <div>
+      <div class="type-row"><span class="spec">Display 52 · Zen Antique</span><span class="display" style="font-size:52px;color:var(--brass-300);line-height:1">World Conquest</span></div>
+      <div class="type-row"><span class="spec">Title 34 · Zen Antique</span><span class="display" style="font-size:34px">Battle of Kamchatka</span></div>
+      <div class="type-row"><span class="spec">Heading 24 · Zen Antique</span><span class="display" style="font-size:24px;color:var(--brass-300)">New game</span></div>
+      <div class="type-row"><span class="spec">Eyebrow 12 · Gothic 700 caps</span><span class="eyebrow">Phase · Reinforce</span></div>
+      <div class="type-row"><span class="spec">Body 15 · Gothic 400</span><span>Tap your territories to place armies. 3 left.</span></div>
+      <div class="type-row"><span class="spec">Small 13.5 · Gothic 500</span><span class="muted" style="font-size:13.5px">Akane takes Ural from Ai (3 vs 2).</span></div>
+      <div class="type-row"><span class="spec">Numeric · Plex Mono 700</span><span class="num" style="font-size:28px;font-weight:700;color:var(--brass-300)">12 · 4:2 · KX7Q3</span></div>
+    </div>
+  </section>
+
+  <!-- COMPONENTS -->
+  <section id="components">
+    <span class="eyebrow">05</span>
+    <h2>Components <span class="jp">部品</span></h2>
+    <p class="lede">Class names match the game's stylesheet; <code>design/components.css</code> can replace its component rules directly.</p>
+    <div class="grid g2">
+      <div class="tile lacquer stack">
+        <span class="eyebrow">Buttons</span>
+        <div class="row"><button class="btn primary">Play vs computer</button><button class="btn">Host online game</button></div>
+        <div class="row"><button class="btn danger">Attack</button><button class="btn ghost">Back</button><button class="btn" disabled>Trade</button></div>
+        <div class="row"><button class="btn small">+ Add player</button><button class="btn small sel">Blitz</button>
+          <button class="icon-btn" aria-label="Menu">☰</button><button class="icon-btn" aria-label="Zoom in">+</button><button class="icon-btn" aria-label="Fit">⤢</button></div>
+        <span class="spec">primary = brass plate · danger = red lacquer · icon = riveted brass bezel</span>
+      </div>
+
+      <div class="tile lacquer stack">
+        <span class="eyebrow">Inputs</span>
+        <label class="field">Your name <input value="Takeda"></label>
+        <label class="field">Computer speed <select><option>Normal</option><option>Fast</option></select></label>
+        <div class="row"><span class="seg"><button class="on">1</button><button>2</button><button>3</button><button disabled>All</button></span>
+          <input type="range" min="1" max="12" value="7" style="flex:1 1 60px;min-width:0"><span class="num" style="font-weight:700;font-size:18px">7</span></div>
+      </div>
+
+      <div class="tile lacquer stack">
+        <span class="eyebrow">Seats & players</span>
+        <div class="seat" style="--c:var(--clan-akane)"><span class="mon" style="--c:var(--clan-akane)"></span><span class="who">Takeda</span><select><option>Human</option></select></div>
+        <div class="seat" style="--c:var(--clan-ai)"><span class="mon" style="--c:var(--clan-ai)"></span><span class="who">Computer</span><select><option>Computer</option></select></div>
+        <div class="seat" style="--c:var(--clan-midori);opacity:.55"><span class="mon" style="--c:var(--clan-midori)"></span><span class="who">Open</span><select><option>Open</option></select></div>
+        <div class="row">
+          <span class="pchip cur" style="--c:var(--clan-akane)"><span class="mon" style="--c:var(--clan-akane);width:16px;height:16px"></span><span class="nm">Takeda</span><span class="st">14 · 3▣</span></span>
+          <span class="pchip" style="--c:var(--clan-ai)"><span class="mon" style="--c:var(--clan-ai);width:16px;height:16px"></span><span class="nm">Uesugi</span><span class="st">11 · 1▣</span></span>
+          <span class="pchip dead" style="--c:var(--clan-kin)"><span class="mon" style="--c:var(--clan-kin);width:16px;height:16px"></span><span class="nm">Oda</span><span class="st">0</span></span>
+        </div>
+      </div>
+
+      <div class="tile lacquer stack">
+        <span class="eyebrow">Room code</span>
+        <div class="code-box">Room code<div class="code">KX7Q3</div><button class="btn small">Share link</button></div>
+        <div class="row"><span class="badge-net">Online · 3 players</span><span class="badge-net bad">Host offline</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GAME UI -->
+  <section id="game">
+    <span class="eyebrow">06</span>
+    <h2>Game UI <span class="jp">戦</span></h2>
+    <p class="lede">Card marks use kanji instead of chess glyphs: 歩 foot soldier, 騎 cavalry, 砲 steam cannon, 紋 wild (any). Attack dice are red lacquer, defence dice are bone.</p>
+    <div class="grid g2">
+      <div class="tile lacquer stack">
+        <span class="eyebrow">Turn panel</span>
+        <div class="ph-head"><span class="mon" style="--c:var(--clan-akane)"></span><b>Takeda</b><span class="phase">Attack</span><span style="flex:1"></span><button class="btn small">Cards 3</button></div>
+        <p class="hint">From <b>Ural</b> (8) to <b>Siberia</b> (3). Roll up to 3 dice.</p>
+        <div class="row"><button class="btn danger">Attack</button><button class="btn">Blitz</button><span style="flex:1"></span><button class="btn ghost">End attack</button></div>
+        <hr class="rule-brass">
+        <span class="eyebrow">Dice</span>
+        <div class="row" style="gap:18px">
+          <span class="row" style="gap:5px"><span class="die a">6</span><span class="die a">4</span><span class="die a lost">2</span></span>
+          <span class="num muted">vs</span>
+          <span class="row" style="gap:5px"><span class="die d">5</span><span class="die d">4</span></span>
+        </div>
+        <span class="spec">Attacker loses 1, defender loses 1 — ties go to the defender</span>
+      </div>
+
+      <div class="tile lacquer stack">
+        <span class="eyebrow">Cards · fuda</span>
+        <div class="row" style="gap:10px;align-items:flex-end">
+          <div class="gcard washi picked"><span class="kind">Infantry</span><span class="sym">歩</span><span class="tn">Japan</span></div>
+          <div class="gcard washi owned"><span class="kind">Cavalry</span><span class="sym">騎</span><span class="tn">Mongolia</span></div>
+          <div class="gcard washi"><span class="kind">Artillery</span><span class="sym">砲</span><span class="tn">Siam</span></div>
+          <div class="gcard washi wild"><span class="kind">Wild</span><span class="sym">紋</span><span class="tn">Any</span></div>
+        </div>
+        <span class="spec">Red name = you own it (+2 armies on trade) · 選 = selected</span>
+      </div>
+
+      <div class="tile lacquer stack">
+        <span class="eyebrow">Feedback</span>
+        <div><span class="toast">Ai takes Kamchatka.</span></div>
+        <div class="banner" style="border-radius:var(--r-sm)">Connection lost — reconnecting</div>
+        <div class="row" style="gap:20px"><span class="gauge" aria-label="Computer thinking"></span><span class="muted">Computer is thinking — pressure gauge loader</span></div>
+      </div>
+
+      <div class="tile washi stack" style="border-radius:var(--r-lg);position:relative;grid-column:1/-1;padding-right:120px">
+        <span class="eyebrow" style="color:var(--brass-700)">Victory</span>
+        <div class="display" style="font-size:30px;line-height:1.1">Takeda unifies the realm in 23 rounds.</div>
+        <span class="hanko" style="position:absolute;right:28px;top:50%;margin-top:-40px;width:80px;height:80px;font-size:32px">天下</span>
+        <div class="row"><button class="btn primary">New game</button><button class="btn">Main menu</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAP -->
+  <section id="map">
+    <span class="eyebrow">07</span>
+    <h2>Map <span class="jp">地図</span></h2>
+    <p class="lede">Real coastlines and borders (Natural Earth 1:50m), Miller projection, shaded relief from the same source blended over clan colours. Indigo sea with seigaiha waves, a lit continental shelf, brass coastline and a brass graticule like a navigator’s chart. Army tokens are clan-coloured coins with a brass rim. This is the live game board: drag, scroll or pinch to zoom.</p>
+    <div class="map-demo" id="mapDemo">
+      <div class="zoom"><button class="icon-btn" data-z="1.6" aria-label="Zoom in">+</button><button class="icon-btn" data-z="0.625" aria-label="Zoom out">−</button><button class="icon-btn" data-z="fit" aria-label="Fit map">⤢</button></div>
+    </div>
+    <div class="map-legend">
+      <span><svg width="34" height="8"><line x1="2" y1="4" x2="32" y2="4" stroke="#efe4cc" stroke-width="1.6" stroke-dasharray="4 4"/></svg>Sea lane — adjacent across water</span>
+      <span><svg width="34" height="8"><line x1="2" y1="4" x2="32" y2="4" stroke="#0f0c0a" stroke-width="4" stroke-linecap="round"/><line x1="2" y1="4" x2="32" y2="4" stroke="#e6c27a" stroke-width="4" stroke-dasharray="1 3"/></svg>Closed border — touching, not adjacent</span>
+      <span><svg width="34" height="10"><line x1="0" y1="5" x2="34" y2="5" stroke="#d4a24c" stroke-width="1" stroke-dasharray="6 3 1 3"/></svg>Equator · graticule every 30°</span>
+    </div>
+  </section>
+
+  <!-- VOICE -->
+  <section id="voice">
+    <span class="eyebrow">08</span>
+    <h2>Voice <span class="jp">言葉</span></h2>
+    <div class="grid g2">
+      <ul class="rules">
+        <li><b>UI text is functional.</b> If removing a line loses nothing the player needs, remove it.</li>
+        <li><b>English first.</b> Kanji are marks (clans, cards, seals), never the only label for an action.</li>
+        <li><b>Theme lives in names and materials,</b> not in long flavour text: “Takeda unifies the realm”, not a paragraph.</li>
+      </ul>
+      <ul class="rules">
+        <li><b>Phases:</b> Reinforce 増 · Attack 攻 · Fortify 固.</li>
+        <li><b>Red means loss or danger only.</b> Brass means “do this”.</li>
+        <li><b>Numbers in mono,</b> always: armies, dice, codes, card values.</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+<script>
+  const groups = {
+    'Lacquer & ink': ['sumi-900','sumi-800','sumi-700','sumi-600','sumi-500'],
+    'Brass': ['brass-200','brass-300','brass-400','brass-500','brass-700'],
+    'Urushi red · verdigris · indigo': ['shu-400','shu-500','shu-700','rokusho-400','rokusho-600','ai-500','ai-700','ai-900'],
+    'Washi': ['washi-50','washi-100','washi-300','washi-500'],
+  };
+  const use = {
+    'sumi-900':'page','sumi-800':'panel','sumi-700':'raised, inputs','sumi-600':'hover','sumi-500':'hairline',
+    'brass-400':'primary, focus','brass-300':'headings','brass-700':'brass hairline','shu-500':'danger, attack','ai-700':'ocean',
+    'washi-100':'text, cards','washi-500':'muted text','rokusho-400':'online, ok',
+  };
+  const cs = getComputedStyle(document.documentElement);
+  document.getElementById('swatches').innerHTML = Object.entries(groups).map(([g, keys]) =>
+    `<p class="grp-title">${g}</p><div class="swatches">` + keys.map(k => {
+      const v = cs.getPropertyValue('--' + k).trim();
+      return `<div class="sw"><div class="chip" style="background:${v}"></div><div class="meta"><b>--${k}</b><span class="spec">${v}${use[k] ? ' · ' + use[k] : ''}</span></div></div>`;
+    }).join('') + '</div>').join('');
+</script>
+<script type="module">
+  import { Board } from '../js/board.js';
+  import { TERRITORIES } from '../js/map.js';
+  const colors = ['#c8382c', '#3466b0', '#3c9a68', '#d9a521'];
+  const territories = {};
+  TERRITORIES.forEach((t, i) => { territories[t.id] = { owner: (i * 7 + (i >> 2)) % 4, armies: 1 + ((i * 5) % 9) }; });
+  const board = new Board(document.getElementById('mapDemo'), () => {});
+  board.render({ players: colors.map(color => ({ color })), territories },
+    { sel: 'ural', to: 'siberia', targets: new Set(['siberia', 'china', 'afgh']) });
+  document.querySelectorAll('#mapDemo [data-z]').forEach(b => b.onclick = () =>
+    b.dataset.z === 'fit' ? board.fit() : board.zoomBy(+b.dataset.z));
+</script>
+</body>
+</html>
